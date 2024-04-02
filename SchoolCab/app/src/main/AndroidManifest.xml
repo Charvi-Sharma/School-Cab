@@ -36,7 +36,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCvYIr3HZ11x0Z9HZrhdYT7YuxGv-wGvoQ" />
+            android:value="Add Key" />
 
 
         <!--
@@ -178,6 +178,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".AttendanceAddDepartureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SelectBusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AdminLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AdminDashboardActivity"
             android:screenOrientation="portrait" />
     </application>
 

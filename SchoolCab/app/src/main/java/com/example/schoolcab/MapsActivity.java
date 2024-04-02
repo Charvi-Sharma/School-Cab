@@ -38,12 +38,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.schoolcab.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.DirectionsApi;
-import com.google.maps.GeoApiContext;
-import com.google.maps.PendingResult;
-import com.google.maps.android.PolyUtil;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.TravelMode;
+//import com.google.maps.DirectionsApi;
+//import com.google.maps.GeoApiContext;
+//import com.google.maps.PendingResult;
+//import com.google.maps.android.PolyUtil;
+//import com.google.maps.model.DirectionsResult;
+//import com.google.maps.model.TravelMode;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -138,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         waypointsStr = waypointsStr.substring(0, waypointsStr.length() - 1); // Remove the last "|"
 
-        String url = baseUrl + origin + "&" + destination + "&" + waypointsStr + "&key=" + "AIzaSyCvYIr3HZ11x0Z9HZrhdYT7YuxGv-wGvoQ";
+        String url = baseUrl + origin + "&" + destination + "&" + waypointsStr + "&key=" + "AIzaSyATEUXqtwozS2BoOaNh1LOvla_SfQXSZFE";
 
         // Use Volley to make an HTTP request to the Directions API
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,

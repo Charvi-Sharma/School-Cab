@@ -258,8 +258,8 @@ public class ReportActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         db.collection("bus")
-                .whereEqualTo("busNo",busNo)
-                .whereEqualTo("schoolId",school)
+                .whereEqualTo("busId","jqSnRu8pR0gsWFVdTvcdRD6gcH62")
+                //.whereEqualTo("schoolId",school)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -301,8 +301,8 @@ public class ReportActivity extends AppCompatActivity {
                             Log.d("ReportActivity", attendanceType);
 
                             db.collection("students")
-                                    .whereEqualTo("busId", busId)
-                                    .whereEqualTo("schoolId",school)
+                                    .whereEqualTo("busId", "jqSnRu8pR0gsWFVdTvcdRD6gcH62")
+                                    .whereEqualTo("schoolId","YCsEefFBNjhJuNO4FQMkKo51QR13")
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override

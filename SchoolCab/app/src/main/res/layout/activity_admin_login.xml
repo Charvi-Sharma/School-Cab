@@ -29,13 +29,13 @@
                     android:layout_alignParentLeft="true"
                     style="@style/viewParent.headerText.NoMode"
                     android:textColor="@color/lavender"
-                    android:text="Search Students "/>
+                    android:text="Welcome Back \n     Admin !"/>
 
 
                 <ImageView
                     android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:src="@drawable/searchstudent"
+                    android:src="@drawable/parents"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"/>
             </RelativeLayout>
@@ -45,34 +45,44 @@
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
                 <EditText
-                    android:id="@+id/edtEnrollmentNo"
+                    android:id="@+id/edtEmail"
                     style="@style/modifiedEditText"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:hint="Enrollment No."/>
+                    android:hint="@string/login_email_hint"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPassword"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin">
+                <EditText
+                    android:id="@+id/edtPassWord"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/login_password_hint"
+                    android:maxLines="1"
+                    android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
-
-
-
+            <TextView
+                android:id="@+id/forgotPassword"
+                style="@style/viewParent"
+                android:text="Forgot Password?"
+                android:textColor="@color/lavender"
+                android:textSize="@dimen/newsMoreTextSize"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/search_button"
+                android:id="@+id/login_button"
                 style="@style/loginButton"
 
-                android:text="Search"
+                android:text="Login"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/loginViewsMargin"
 
                 tools:ignore="MissingClass" />
-
-
-
-
-
-
-
 
         </LinearLayout>
     </ScrollView>

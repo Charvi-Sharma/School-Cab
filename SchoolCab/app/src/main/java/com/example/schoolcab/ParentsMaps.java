@@ -147,7 +147,7 @@ public class ParentsMaps extends FragmentActivity implements OnMapReadyCallback 
         }
         waypointsStr = waypointsStr.substring(0, waypointsStr.length() - 1); // Remove the last "|"
 
-        String url = baseUrl + origin + "&" + destination + "&" + waypointsStr + "&key=" + "AIzaSyCvYIr3HZ11x0Z9HZrhdYT7YuxGv-wGvoQ";
+        String url = baseUrl + origin + "&" + destination + "&" + waypointsStr + "&key=" + "AIzaSyATEUXqtwozS2BoOaNh1LOvla_SfQXSZFE";
 
         // Use Volley to make an HTTP request to the Directions API
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
