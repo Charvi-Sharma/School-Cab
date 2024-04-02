@@ -36,7 +36,8 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="Add Key" />
+            android:value="AIzaSyATEUXqtwozS2BoOaNh1LOvla_SfQXSZFE" />
+
 
 
         <!--
@@ -188,6 +189,11 @@
         <activity
             android:name=".AdminDashboardActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddStopActivity"
+            android:screenOrientation="portrait" />
+
+
     </application>
 
 </manifest>
