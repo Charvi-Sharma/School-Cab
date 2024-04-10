@@ -14,6 +14,16 @@ public class NewStudent {
     private int age;
     private int weight;
 
+    private String busId;
+
+    public String getBusId() {
+        return busId;
+    }
+
+    public void setBusId(String busId) {
+        this.busId = busId;
+    }
+
     private String schoolId;
     public NewStudent() {
         // Default constructor required for Firestore
