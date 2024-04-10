@@ -1,6 +1,7 @@
 package com.example.schoolcab;
 
 public class Attendance {
+    //Class not used
 
     private String studentId;
     private String schoolId;

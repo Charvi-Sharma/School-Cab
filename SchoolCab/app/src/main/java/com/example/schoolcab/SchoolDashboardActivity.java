@@ -57,8 +57,9 @@ public class SchoolDashboardActivity extends AppCompatActivity {
 
 
         busButton.setOnClickListener(v -> {
-            Toast.makeText(SchoolDashboardActivity.this, "This Functionality is not yet been Added please wait for updated version", Toast.LENGTH_LONG).show();
-
+            //Toast.makeText(SchoolDashboardActivity.this, "This Functionality is not yet been Added please wait for updated version", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(SchoolDashboardActivity.this, SelectBusActivity.class);
+            startActivity(intent);
         });
 
         busCoordinatorButton.setOnClickListener(v -> {

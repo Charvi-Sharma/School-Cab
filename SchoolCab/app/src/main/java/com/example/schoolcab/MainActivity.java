@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout studentButton = findViewById(R.id.studentButton);
         RelativeLayout busButton = findViewById(R.id.busButton);
         RelativeLayout tempButton = findViewById(R.id.tempButton);
+
+        TextView adminLogin = findViewById(R.id.admin);
+        adminLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AdminLoginActivity.class);
+            startActivity(intent);
+        });
       
 
         schoolButton.setOnClickListener(v -> {
