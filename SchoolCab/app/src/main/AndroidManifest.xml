@@ -185,6 +185,9 @@
         <activity
             android:name=".AssignBusActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".UpdateRouteActivity"
+            android:screenOrientation="portrait" />
 
 
     </application>
