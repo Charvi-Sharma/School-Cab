@@ -182,6 +182,10 @@
         <activity
             android:name=".AddStopActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".AssignBusActivity"
+            android:screenOrientation="portrait" />
+
 
     </application>
 
