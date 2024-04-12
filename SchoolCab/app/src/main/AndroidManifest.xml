@@ -39,6 +39,7 @@
             android:value="AIzaSyATEUXqtwozS2BoOaNh1LOvla_SfQXSZFE" />
 
 
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -180,6 +181,15 @@
             android:name=".AttendanceAddDepartureActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SelectBusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AdminLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".AddStopActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -188,6 +198,7 @@
         <activity
             android:name=".UpdateRouteActivity"
             android:screenOrientation="portrait" />
+
 
 
     </application>

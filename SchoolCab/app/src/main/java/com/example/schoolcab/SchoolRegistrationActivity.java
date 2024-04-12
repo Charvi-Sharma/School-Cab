@@ -75,7 +75,7 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
                 school.setMobileNo(mobileNo);
 
 
-                mAuth.createUserWithEmailAndPassword(email, "1234567890")
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
