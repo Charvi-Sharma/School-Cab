@@ -25,7 +25,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -44,6 +51,7 @@ import java.util.Map;
 public class AdminDashboardActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     SharedPreferences sharedPreferences;
     private List<Map<String,String>> schoolData = new ArrayList<>();
@@ -57,6 +65,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
+
+        mAuth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
 
@@ -101,8 +111,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
 
         Button btn = findViewById(R.id.button);
+        Button deleteBtn = findViewById(R.id.delete_button);
         btn.setOnClickListener(v -> {
-
             Log.d("List: ", checkedSchools.toString());
             for(String sch : checkedSchools){
 
@@ -113,9 +123,54 @@ public class AdminDashboardActivity extends AppCompatActivity {
             Toast.makeText(AdminDashboardActivity.this, "Verified Succesfully", Toast.LENGTH_LONG).show();
             finish();
             startActivity(getIntent());
-
-
         });
+
+        deleteBtn.setOnClickListener(v -> {
+                    Log.d("List: ", checkedSchools.toString());
+                    for(String sch : checkedSchools){
+                        DocumentReference doc = db.collection("schools").document(sch);
+                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    Map<String,Object> m = task.getResult().getData();
+                                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
+                                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        FirebaseUser user = mAuth.getCurrentUser();
+                                                        AuthCredential credential = EmailAuthProvider
+                                                                .getCredential(m.get("email").toString(), m.get("password").toString());
+                                                        Log.d("AdminDashboard : User", String.valueOf(user));
+                                                        if (user != null) {
+                                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
+                                                                if (task1.isSuccessful()) {
+                                                                    Log.d("Tag", "User account deleted.");
+                                                                    doc.delete();
+                                                                    Toast.makeText(AdminDashboardActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
+                                                                    finish();
+                                                                    startActivity(getIntent());
+                                                                }
+                                                                else {
+                                                                    Log.d("Tag", "User deletion failed.");
+                                                                }
+                                                            }));
+                                                        }
+                                                    }
+                                                    else{
+                                                        Log.d("Tag", "Authentication failed.");
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+                    }
+                }
+
+        );
 
     }
 
