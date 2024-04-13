@@ -29,7 +29,7 @@
                     android:layout_alignParentLeft="true"
                     style="@style/viewParent.headerText.NoMode"
                     android:textColor="@color/lavender"
-                    android:text="Search Bus "/>
+                    android:text="Assing Student to Bus"/>
 
                 <ImageView
                     android:layout_width="160dp"
