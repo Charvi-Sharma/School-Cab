@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -107,13 +108,6 @@ public class AttendanceAddDepartureActivity extends AppCompatActivity {
 
         Button btn = findViewById(R.id.button);
         btn.setOnClickListener(v -> {
-            Date c = Calendar.getInstance().getTime();
-            System.out.println("Current time => " + c);
-
-            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            String formattedDate = df.format(c);
-
-
             Log.d("List: ", checkedStudents.toString());
             for(String stud : checkedStudents){
 //                Attendance record = new Attendance(stud,id,"bus-1",formattedDate);
@@ -126,7 +120,7 @@ public class AttendanceAddDepartureActivity extends AppCompatActivity {
 //                        });
 
                 DocumentReference doc = db.collection("students").document(stud);
-                doc.update("departureAttendance", FieldValue.arrayUnion(formattedDate));
+                doc.update("departureAttendance", FieldValue.arrayUnion(Timestamp.now()));
 
             }
             Toast.makeText(AttendanceAddDepartureActivity.this, "Attendance Marked Succesfully", Toast.LENGTH_LONG).show();

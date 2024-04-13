@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -65,14 +66,14 @@ public class ReportActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     private String TAG = "Report Activity";
     int rowNum=1;
-    String busId = "";
 
     Workbook wb = new HSSFWorkbook();
     Sheet sheet = wb.createSheet("sheet1");
 
-    String startDat="",endDat="",attendanceType;
+    String startDat="";
 
-    RadioGroup radioGroup;
+    Map<String,String> busMap = new HashMap<>();
+
 
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
@@ -100,8 +101,6 @@ public class ReportActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
 
         Button startDate = findViewById(R.id.idBtnPickStartDate);
-        Button endDate = findViewById(R.id.idBtnPickEndDate);
-
 
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,50 +145,6 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        endDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // on below line we are getting
-                // the instance of our calendar.
-                final Calendar c = Calendar.getInstance();
-
-                // on below line we are getting
-                // our day, month and year.
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-
-                // on below line we are creating a variable for date picker dialog.
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        // on below line we are passing context.
-                        ReportActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // on below line we are setting date to our text view.
-                                endDat = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                                try {
-                                    Date parsedDate = df.parse(endDat);
-                                    endDat = df.format(parsedDate);
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                                endDate.setText(endDat);
-                            }
-                        },
-                        // on below line we are passing year,
-                        // month and day for selected date in our date picker.
-                        year, month, day);
-                // at last we are calling show to
-                // display our date picker dialog.
-                datePickerDialog.show();
-            }
-        });
-
-
         Button btn = findViewById(R.id.edtGenerate);
         btn.setOnClickListener(v ->{
             if(ContextCompat.checkSelfPermission(getApplicationContext(),"android.permission.WRITE_EXTERNAL_STORAGE")== PackageManager.PERMISSION_DENIED){
@@ -205,103 +160,36 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 
-    private static List<Date> getDates(String dateString1, String dateString2)
-    {
-        ArrayList<Date> dates = new ArrayList<Date>();
-        DateFormat df1 = new SimpleDateFormat("dd-MM-yyyy");
-
-        Date date1 = null;
-        Date date2 = null;
-
-        try {
-            date1 = df1 .parse(dateString1);
-            date2 = df1 .parse(dateString2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(date1);
-
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date2);
-
-        while(!cal1.after(cal2))
-        {
-            dates.add(cal1.getTime());
-            cal1.add(Calendar.DATE, 1);
-        }
-        return dates;
-    }
-
-
     @SuppressLint("ClickableViewAccessibility")
     private void fetchStudentData(){
         Row headerRow = sheet.createRow(0);
 
-        List<Date> dates = getDates(startDat, endDat);
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-//        Cell tempcell = headerRow.createCell(0);
-//        tempcell.setCellValue(11);
-        for(int i=0; i<dates.size();i++)
-        {
-            Cell cell = headerRow.createCell(i+1);
-            cell.setCellValue(df.format(dates.get(i)));
-        }
-
-        EditText bus_no = findViewById(R.id.edtBusNo);
-        Integer busNo = Integer.parseInt(bus_no.getText().toString());
-
+        Cell tempcell = headerRow.createCell(1);
+        tempcell.setCellValue("Bus No");
+        Cell tempcell1 = headerRow.createCell(2);
+        tempcell1.setCellValue("Arrival Time");
+        Cell tempcell2 = headerRow.createCell(3);
+        tempcell2.setCellValue("Departure Time");
 
         String school = sharedpreferences.getString("sId",NULL);
 
         db = FirebaseFirestore.getInstance();
+
         db.collection("bus")
-                .whereEqualTo("busNo",busNo)
                 .whereEqualTo("schoolId",school)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Task Successful");
-                            Log.d(TAG, String.valueOf(task.getResult().size()));
+                        if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d("Doc", String.valueOf(document));
-                                busId=document.getId();
+                                String busId = document.getId();
+                                String  busNo = String.valueOf(document.getData().get("busNo"));
+                                Log.d(busId+": ", busNo);
+                                busMap.put(busId, busNo);
                             }
-
-                            RadioGroup radioGroup = (RadioGroup)findViewById(R.id.groupradio);
-                            radioGroup.setOnCheckedChangeListener(
-                                    new RadioGroup
-                                            .OnCheckedChangeListener() {
-                                        @Override
-                                        public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                            RadioButton
-                                                    radioButton
-                                                    = (RadioButton)group
-                                                    .findViewById(checkedId);
-                                        }
-                                    });
-
-                            int selectedId = radioGroup.getCheckedRadioButtonId();
-                            if (selectedId == -1) {
-                                Toast.makeText(ReportActivity.this, "Please select attendance type", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                               if(selectedId==R.id.arrival){
-                                   attendanceType="arrival";
-                               }
-                               else {
-                                   attendanceType="departure";
-                               }
-                            }
-
-                            Log.d("ReportActivity", attendanceType);
-
                             db.collection("students")
-                                    .whereEqualTo("busId", busId)
                                     .whereEqualTo("schoolId",school)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -310,22 +198,35 @@ public class ReportActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Log.d(TAG, "Task Successful");
                                                 Log.d(TAG, String.valueOf(task.getResult().size()));
+                                                DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                                                DateFormat tf = new SimpleDateFormat("HH:mm:ss");
                                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                                     //Log.d("Doc", String.valueOf(document));
                                                     Row row = sheet.createRow(rowNum);
                                                     Cell namecell = row.createCell(0);
                                                     namecell.setCellValue((String) document.getData().get("name"));
-                                                    for(int i=0; i<dates.size();i++)
-                                                    {
-                                                        Cell cell = row.createCell(i+1);
-                                                        List<String> atten = (List<String>) document.getData().get(attendanceType+"Attendance");
-                                                        if(atten.contains(df.format(dates.get(i)))){
-                                                            cell.setCellValue(1);
+                                                    Cell cell = row.createCell(1);
+                                                    cell.setCellValue(busMap.get((String) document.getData().get("busId")));
+                                                    Cell arrivalCell = row.createCell(2);
+                                                    List<Timestamp> arrivalAtten = (List<Timestamp>) document.getData().get("arrivalAttendance");
+                                                    if(arrivalAtten!=null){
+                                                        for(Timestamp t : arrivalAtten){
+                                                            String date = df.format(t.toDate());
+                                                            if(startDat.equals(date)){
+                                                                arrivalCell.setCellValue(tf.format(t.toDate()));
+                                                            }
                                                         }
-                                                        else{
-                                                            cell.setCellValue(0);
+                                                    }
+                                                    Cell departCell = row.createCell(3);
+                                                    List<Timestamp> departAtten = (List<Timestamp>) document.getData().get("departureAttendance");
+                                                    if(departAtten!=null){
+                                                        for(Timestamp t : departAtten){
+                                                            String date = df.format(t.toDate());
+                                                            Log.d("date: ", date);
+                                                            if(startDat.equals(date)){
+                                                                departCell.setCellValue(tf.format(t.toDate()));
+                                                            }
                                                         }
-
                                                     }
                                                     //Log.d(TAG, document.getId() + " => " + document.getData());
                                                     rowNum++;
@@ -333,7 +234,7 @@ public class ReportActivity extends AppCompatActivity {
 
                                                 File path = Environment.getExternalStoragePublicDirectory(
                                                         Environment.DIRECTORY_DOWNLOADS);
-                                                File file = new File(path, attendanceType+"AttendanceReport"+busNo.toString()+".xls");
+                                                File file = new File(path, "AttendanceReport"+startDat+".xls");
 
                                                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                                                     try {
@@ -356,14 +257,11 @@ public class ReportActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-
-
-
-                        } else {
-                            Log.d(TAG, "Error while fetching bus data: ", task.getException());
                         }
                     }
                 });
+
+
     }
 
 }
