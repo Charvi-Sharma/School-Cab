@@ -181,6 +181,19 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputStopName"
+                        style="@style/parent"
+                        android:layout_marginTop="20dp">
+                        <AutoCompleteTextView
+                            android:id="@+id/stopNameAutoComplete"
+                            style="@style/modifiedEditText"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:hint="Stop Name"
+                            android:layout_height="60dp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         style="@style/parent"
                         android:layout_marginTop="@dimen/loginViewsMargin">
                         <EditText

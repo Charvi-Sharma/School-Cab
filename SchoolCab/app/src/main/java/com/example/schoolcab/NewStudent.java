@@ -16,6 +16,8 @@ public class NewStudent {
 
     private String busId;
 
+    private String stopName;
+
     public String getBusId() {
         return busId;
     }
@@ -140,6 +142,14 @@ public class NewStudent {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public String getStopName() {
+        return stopName;
+    }
+
+    public void setStopName(String stopName) {
+        this.stopName = stopName;
     }
 }
 

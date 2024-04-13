@@ -1,5 +1,7 @@
 package com.example.schoolcab;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +11,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,9 +27,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddStudent extends AppCompatActivity {
@@ -44,6 +52,9 @@ public class AddStudent extends AppCompatActivity {
     String phoneNo ;
     String address  ;
     String  defaultAddress;
+    private AutoCompleteTextView stopNameAutoComplete;
+    private List<String> stopNames;
+
 
     @Override
     public void onBackPressed() {
@@ -77,7 +88,6 @@ else{
         sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String id = sharedpreferences.getString("email", null);
         String password = sharedpreferences.getString("password", null);
-
         page =1;
 
 
@@ -120,6 +130,9 @@ if(name.isEmpty()|| guardian.isEmpty() || email.isEmpty() || phoneNo.isEmpty() |
             container2.setVisibility(View.VISIBLE);
             heading.setText("Student Details \n         page 2");
             page =2;
+            stopNameAutoComplete = findViewById(R.id.stopNameAutoComplete);
+            String schoolID = sharedpreferences.getString("sId", null);
+            populateStopNames(schoolID);
 
 
                 });
@@ -140,15 +153,17 @@ if(name.isEmpty()|| guardian.isEmpty() || email.isEmpty() || phoneNo.isEmpty() |
 
 
 
-
             String rollNo = edtRollNo.getText().toString();
             String section  = edtSection.getText().toString();
             String sex = edtSex.getText().toString();
             String Age = edtAge.getText().toString();
             String Weight  = edtWeight.getText().toString();
             String Standard = edtClass.getText().toString();
+            String selectedStopName = stopNameAutoComplete.getText().toString().trim();
 
-            if(rollNo.isEmpty() || section.isEmpty() || Age.isEmpty() || sex.isEmpty() || Weight.isEmpty() || Standard.isEmpty())
+
+
+            if(rollNo.isEmpty() || section.isEmpty() || Age.isEmpty() || sex.isEmpty() || Weight.isEmpty() || Standard.isEmpty() || selectedStopName.isEmpty())
             {
                 Toast.makeText(AddStudent.this, "Some Field Missing . Please Check", Toast.LENGTH_SHORT).show();
                 return ;
@@ -180,6 +195,7 @@ if(name.isEmpty()|| guardian.isEmpty() || email.isEmpty() || phoneNo.isEmpty() |
             student.setWeight(weight);
             student.setEmail(email);
             student.setSchoolId(ID);
+            student.setStopName(selectedStopName);
 
 
 //            Ccreating a authenication user in firebase
@@ -236,5 +252,26 @@ if(name.isEmpty()|| guardian.isEmpty() || email.isEmpty() || phoneNo.isEmpty() |
 
 
 
+    }
+
+    private void populateStopNames(String schoolID) {
+        db.collection("stops")
+                .whereEqualTo("schoolID", schoolID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        stopNames = new ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String stopName = document.getString("stopName");
+                            if (stopName != null) {
+                                stopNames.add(stopName);
+                            }
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, stopNames);
+                        stopNameAutoComplete.setAdapter(adapter);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
     }
 }
