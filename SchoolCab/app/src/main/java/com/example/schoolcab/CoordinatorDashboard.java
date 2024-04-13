@@ -50,8 +50,10 @@ public class CoordinatorDashboard extends AppCompatActivity {
 
         RelativeLayout logoutButton = findViewById(R.id.logout_button);
         RelativeLayout addBus = findViewById(R.id.addBus);
-        RelativeLayout allotBus = findViewById(R.id.allotBus);
         RelativeLayout addStopButton = findViewById(R.id.addStop);
+        RelativeLayout allotBus = findViewById(R.id.allotBus);
+        RelativeLayout allotStudent = findViewById(R.id.allotStudent);
+        RelativeLayout changeStop = findViewById(R.id.changeStop);
 
 
         logoutButton.setOnClickListener(v -> {
@@ -87,6 +89,18 @@ public class CoordinatorDashboard extends AppCompatActivity {
             Intent intent = new Intent(CoordinatorDashboard.this, AddStopActivity.class);
             startActivity(intent);
 //            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
+        });
+
+        allotStudent.setOnClickListener(v -> {
+//            Intent intent = new Intent(CoordinatorDashboard.this, AddStopActivity.class);
+//            startActivity(intent);
+            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
+        });
+
+        changeStop.setOnClickListener(v -> {
+//            Intent intent = new Intent(CoordinatorDashboard.this, AddStopActivity.class);
+//            startActivity(intent);
+            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
         });
 
     }
