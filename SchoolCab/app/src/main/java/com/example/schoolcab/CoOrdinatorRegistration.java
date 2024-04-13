@@ -75,7 +75,7 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
 
 
             //            Creating authentication for user in firebase
-            mAuth.createUserWithEmailAndPassword(coordinator_id,g password)
+            mAuth.createUserWithEmailAndPassword(coordinator_id, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
