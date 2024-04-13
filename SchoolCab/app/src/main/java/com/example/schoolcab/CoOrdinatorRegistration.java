@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,10 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
         SharedPreferences sharedpreferences=getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
         String school_id=sharedpreferences.getString("sId",NULL);
 
+         String id = sharedpreferences.getString("email", null);
+        String pass = sharedpreferences.getString("password", null);
+
+
         mAuth = FirebaseAuth.getInstance();
         String ID = mAuth.getCurrentUser().getUid().toString();
 
@@ -70,7 +75,7 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
 
 
             //            Creating authentication for user in firebase
-            mAuth.createUserWithEmailAndPassword("kriti@gmail.com", "1234567890")
+            mAuth.createUserWithEmailAndPassword(coordinator_id, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -97,6 +102,11 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
                                                     // User information saved to Firestore successfully
                                                     Toast.makeText(CoOrdinatorRegistration.this, "Coordinator registered successfully!", Toast.LENGTH_SHORT).show();
                                                     mAuth.signOut();
+
+                                                    mAuth.signInWithEmailAndPassword(id, pass);
+                                                    Intent intent = new Intent(CoOrdinatorRegistration.this, CoordinatorDashboardActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 } else {
                                                     // Handle Firestore document creation failure
                                                     Toast.makeText(CoOrdinatorRegistration.this, "Error saving user data to Firestore.", Toast.LENGTH_SHORT).show();
