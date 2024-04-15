@@ -184,6 +184,10 @@ public class UploadStudents extends AppCompatActivity {
 
             }
 
+            HashMap<NewStudent , String> mapper = new HashMap<>();
+            final int[] completedTasksCount = {0};
+            int totalTasks = students.size();
+
             for (int i=0 ; i<students.size() ; i++){
 
                 NewStudent student = students.get(i);
@@ -195,7 +199,7 @@ public class UploadStudents extends AppCompatActivity {
                                     // User signup successful
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     String userId = user.getUid();
-
+//                                    see this line in log uid is getting printed in same for every loop
                                     Log.d("userId" , userId);
 
 
@@ -209,43 +213,25 @@ public class UploadStudents extends AppCompatActivity {
                                     user.updateProfile(profileUpdates);
 
                                     // Save additional user information to Firestore
-                                    DocumentReference userRef = db.collection("students").document(userId);
+//                                    DocumentReference userRef = db.collection("students").document(userId);
 
-                                    Log.d("userId ---" , String.valueOf(userRef));
+//                                    Log.d("userId ---" , String.valueOf(userRef));
 
+                                    mapper.put(student , userId);
 
-//                                Saving Additional information of user in fireStore with same id
-                                    userRef.set(student)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Log.d("userId --- "  , "taskSuccessfull");
-                                                        // User information saved to Firestore successfully
-//                                                        Toast.makeText(AddStudent.this, "Student registered successfully!", Toast.LENGTH_SHORT).show();
-                                                        mAuth.signOut();
+                                    completedTasksCount[0]++; // Increment completed tasks count
 
-                                                        //                                                        Intent intent = new Intent(AddStudent.this, StudentAddUpdatePage.class);
-//                                                        startActivity(intent);
-//                                                        finish();
-
-
-                                                    } else {
-                                                        // Handle Firestore document creation failure
-                                                        Log.d("userId --- "  , "taskSuccessfull not pOsiibe");
-                                                        Toast.makeText(UploadStudents.this, "Error saving user data to Firestore.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-
-
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // Process the next student after the delay
-
+                                    // Check if all tasks are completed
+                                    if (completedTasksCount[0] == totalTasks) {
+                                        // All tasks are completed, execute the second loop
+                                        for (Map.Entry<NewStudent, String> entry : mapper.entrySet()) {
+                                            NewStudent studentx = entry.getKey();
+                                            String uId = entry.getValue();
+                                            System.out.println("Key: " + studentx.getName() + ", Value: " + uId);
                                         }
-                                    }, 1000);
+                                    }
+
+
                                 } else {
                                     // Handle signup failure
                                     Toast.makeText(UploadStudents.this, "Signup failed.", Toast.LENGTH_SHORT).show();
@@ -254,6 +240,13 @@ public class UploadStudents extends AppCompatActivity {
                         });
 
 
+            }
+
+//            this loop not working because thread comes here before the for loop for authentication is completed so implemented same at line 225 - 232
+            for (Map.Entry<NewStudent, String> entry : mapper.entrySet()) {
+                NewStudent studentx = entry.getKey();
+                String uId = entry.getValue();
+                System.out.println("Key: " + studentx.getName() + ", Value: " + uId);
             }
 
             workbook.close();
@@ -265,4 +258,33 @@ public class UploadStudents extends AppCompatActivity {
 
         return students;
     }
+
 }
+
+
+//
+////                                Saving Additional information of user in fireStore with same id
+//                                    userRef.set(student)
+//                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+//@Override
+//public void onComplete(@NonNull Task<Void> task) {
+//        if (task.isSuccessful()) {
+//        Log.d("userId --- "  , "taskSuccessfull");
+//        // User information saved to Firestore successfully
+////                                                        Toast.makeText(AddStudent.this, "Student registered successfully!", Toast.LENGTH_SHORT).show();
+//        mAuth.signOut();
+//
+//        //                                                        Intent intent = new Intent(AddStudent.this, StudentAddUpdatePage.class);
+////                                                        startActivity(intent);
+////                                                        finish();
+//
+//
+//        } else {
+//        // Handle Firestore document creation failure
+//        Log.d("userId --- "  , "taskSuccessfull not pOsiibe");
+//        Toast.makeText(UploadStudents.this, "Error saving user data to Firestore.", Toast.LENGTH_SHORT).show();
+//        }
+//        }
+//        });
+
+
