@@ -78,7 +78,7 @@
                             <EditText
                                 android:id="@+id/edtBusId"
                                 style="@style/modifiedEditText"
-                                android:inputType="number"
+                                android:inputType="textPersonName"
                                 android:maxLines="1"
                                 android:hint="Bus Id" />
                         </com.google.android.material.textfield.TextInputLayout>

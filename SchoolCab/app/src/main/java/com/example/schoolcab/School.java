@@ -10,12 +10,17 @@ public class School {
     private String email;
     private String mobileNo;
 
-    public School(String name, String board, Boolean verifiedStatus, String schoolId, String password) {
+    private Integer busCapacity;
+
+    public School(String name, String board, Boolean verifiedStatus, String email, String password, String licenseNo, String mobileNo, Integer busCapacity) {
         this.name = name;
         this.board = board;
         this.verifiedStatus = verifiedStatus;
         this.licenseNo = licenseNo;
         this.password = password;
+        this.email = email;
+        this.busCapacity = busCapacity;
+        this.mobileNo = mobileNo;
     }
 
     public School() {
@@ -78,5 +83,13 @@ public class School {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
+    }
+
+    public Integer getBusCapacity() {
+        return busCapacity;
+    }
+
+    public void setBusCapacity(Integer busCapacity) {
+        this.busCapacity = busCapacity;
     }
 }

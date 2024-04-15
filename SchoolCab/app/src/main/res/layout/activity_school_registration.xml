@@ -137,6 +137,18 @@
                             android:inputType="textPassword"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputBusCapacity"
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+                        <EditText
+                            android:id="@+id/busCapacity"
+                            style="@style/modifiedEditText"
+                            android:hint="Bus Capacity"
+                            android:maxLines="1"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/register_button"
                         style="@style/loginButton"

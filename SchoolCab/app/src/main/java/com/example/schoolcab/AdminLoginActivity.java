@@ -59,7 +59,7 @@ public class AdminLoginActivity extends AppCompatActivity {
                                     Log.d("doc", document.toString());
                                     // Redirect to AdminDashboardActivity
 
-                                    Intent intent = new Intent(AdminLoginActivity.this, AdminDashboardActivity.class);
+                                    Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
                                     startActivity(intent);
                                     finish(); // Close the current activity
                                 }

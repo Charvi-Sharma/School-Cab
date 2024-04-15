@@ -198,8 +198,15 @@
         <activity
             android:name=".UpdateRouteActivity"
             android:screenOrientation="portrait" />
-
-
+        <activity
+            android:name=".AdminHomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ApproveBusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RequestBusActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 
