@@ -92,9 +92,9 @@ public class CoordinatorDashboard extends AppCompatActivity {
         });
 
         allotStudent.setOnClickListener(v -> {
-//            Intent intent = new Intent(CoordinatorDashboard.this, AddStopActivity.class);
-//            startActivity(intent);
-            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(CoordinatorDashboard.this, AssignStudentsActivity.class);
+            startActivity(intent);
+//            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
         });
 
         changeStop.setOnClickListener(v -> {

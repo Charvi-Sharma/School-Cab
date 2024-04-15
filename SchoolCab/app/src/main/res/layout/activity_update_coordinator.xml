@@ -1,94 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateCoordinator">
+    android:background="@color/register_bk_color"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:layout_gravity="center">
 
-    <EditText
-        android:id="@+id/schoolid"
-        android:layout_width="350dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="School Id"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.619" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="30dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/phoneNo"
-        android:layout_width="350dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Phone No."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.445" />
+                <TextView
+                    android:id="@+id/heading"
+                    style="@style/viewParent.headerText.NoMode"
+                    android:layout_width="173dp"
+                    android:layout_height="93dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="0dp"
+                    android:text="Update Coordinator"
+                    android:textAlignment="center"
+                    android:textColor="@color/whiteTextColor" />
 
-    <EditText
-        android:id="@+id/lastName"
-        android:layout_width="350dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Last Name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.269" />
+                <ImageView
 
-    <Button
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="84dp"
-        android:text="Save Changes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schoolid"
-        app:layout_constraintVertical_bias="0.741" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/update"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="331dp"
-        android:layout_height="42dp"
-        android:fontFamily="cursive"
-        android:text="Update"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="34sp"
-        android:textStyle="normal|bold|italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.419"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06" />
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="350dp"
-        android:layout_height="56dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.099" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/whiteTextColor"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:id="@+id/container1"
+                    android:layout_width="match_parent"
+                    android:layout_height="505dp"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputName"
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+
+                        <EditText
+                            android:id="@+id/edtName"
+                            style="@style/modifiedEditText"
+                            android:hint="Name"
+                            android:inputType="textPersonName"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputSchoolBoard"
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+
+                        <EditText
+                            android:id="@+id/edtGuardian"
+                            style="@style/modifiedEditText"
+                            android:hint="Last Name"
+                            android:inputType="textPersonName"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputEmail"
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+
+                        <EditText
+                            android:id="@+id/edtEmail"
+                            style="@style/modifiedEditText"
+                            android:hint="Phone_No"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputAddress"
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+
+                        <EditText
+                            android:id="@+id/edtAddress"
+                            style="@style/modifiedEditText"
+                            android:hint="School_Id"
+                            android:inputType="text"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/save"
+                        style="@style/loginButton"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/loginViewsMargin"
+                        android:text="Save Changes"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/container2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+                        <EditText
+                            android:id="@+id/name"
+                            style="@style/modifiedEditText"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:hint="Class / Standard"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+                        <EditText
+                            android:id="@+id/lastName"
+                            style="@style/modifiedEditText"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:hint="Section"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+                        <EditText
+                            android:id="@+id/phoneNo"
+                            style="@style/modifiedEditText"
+                            android:inputType="textPersonName"
+                            android:maxLines="1"
+                            android:hint="Roll No."/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin">
+                        <EditText
+                            android:id="@+id/schoolid"
+                            style="@style/modifiedEditText"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:hint="Age"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/parent"
+                        android:layout_marginTop="@dimen/loginViewsMargin"/>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -199,6 +199,9 @@
             android:name=".UpdateRouteActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".AssignStudentsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".AdminHomeActivity"
             android:screenOrientation="portrait" />
         <activity
