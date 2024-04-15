@@ -19,7 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class AddBusActivity extends AppCompatActivity {
@@ -68,47 +70,72 @@ public class AddBusActivity extends AppCompatActivity {
             bus.setSchoolId(schoolId);
 
 
-//            Ccreating authentication for user in firebase
-            mAuth.createUserWithEmailAndPassword(bus.getBusUserId(), "1234567890")
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            db.collection("bus")
+                    .whereEqualTo("schoolId", schoolId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // User signup successful
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                String userId = user.getUid();
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                Long buses= Long.valueOf(task.getResult().size());
+                                DocumentReference schoolRef = db.collection("schools").document(schoolId);
+                                schoolRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        Long cap= (Long) task.getResult().getData().get("busCapacity");
+                                        if(buses < cap){
+                                            //            Creating authentication for user in firebase
+                                            mAuth.createUserWithEmailAndPassword(bus.getBusUserId(), "1234567890")
+                                                    .addOnCompleteListener(AddBusActivity.this, new OnCompleteListener<AuthResult>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                                            if (task.isSuccessful()) {
+                                                                // User signup successful
+                                                                FirebaseUser user = mAuth.getCurrentUser();
+                                                                String userId = user.getUid();
 
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName("bus")
-                                        .build();
+                                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                                        .setDisplayName("bus")
+                                                                        .build();
 
-                                user.updateProfile(profileUpdates);
+                                                                user.updateProfile(profileUpdates);
 
-                                // Save additional user information to Firestore
-                                DocumentReference userRef = db.collection("bus").document(userId);
+                                                                // Save additional user information to Firestore
+                                                                DocumentReference userRef = db.collection("bus").document(userId);
 
 //                                Saving Additional information of user in fireStore with same id
-                                userRef.set(bus)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    // User information saved to Firestore successfully
-                                                    Toast.makeText(AddBusActivity.this, "Bus registered successfully!", Toast.LENGTH_SHORT).show();
-                                                    mAuth.signOut();
-                                                } else {
-                                                    // Handle Firestore document creation failure
-                                                    Toast.makeText(AddBusActivity.this, "Error saving bus data to Firestore.", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
+                                                                userRef.set(bus)
+                                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    // User information saved to Firestore successfully
+                                                                                    Toast.makeText(AddBusActivity.this, "Bus registered successfully!", Toast.LENGTH_SHORT).show();
+                                                                                    mAuth.signOut();
+                                                                                } else {
+                                                                                    // Handle Firestore document creation failure
+                                                                                    Toast.makeText(AddBusActivity.this, "Error saving bus data to Firestore.", Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            }
+                                                                        });
 
-                            } else {
-                                // Handle signup failure
-                                Toast.makeText(AddBusActivity.this, "Signup failed.", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                // Handle signup failure
+                                                                Toast.makeText(AddBusActivity.this, "Signup failed.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                        else {
+                                            Toast.makeText(AddBusActivity.this, "Bus Capacity Exceeded", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
                             }
                         }
                     });
+
 
         });
 

@@ -49,30 +49,27 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class AdminDashboardActivity extends AppCompatActivity {
+public class ApproveBusActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
 
-    SharedPreferences sharedPreferences;
     private List<Map<String,String>> schoolData = new ArrayList<>();
     private List<String> schoolNames = new ArrayList<>();
 
     private List<String> checkedSchools = new ArrayList<>();
 
-    private String TAG = "AdminDashboardActivity";
+    private Map<String,Long> idToBus = new HashMap<>();
+    private String TAG = "ApproveBusActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_dashboard);
-
-        mAuth = FirebaseAuth.getInstance();
+        setContentView(R.layout.activity_approve_bus);
 
         db = FirebaseFirestore.getInstance();
 
         db.collection("schools")
-                .whereEqualTo("verifiedStatus", false)
+                .orderBy("requestedBus")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -85,8 +82,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
                                 Map<String,String> school = new HashMap<>();
                                 school.put("SchoolId", document.getId());
                                 school.put("SchoolName", (String) document.getData().get("name"));
-                                school.put("BusCap",String.valueOf((Long) document.getData().get("busCapacity")));
+                                school.put("BusCap",String.valueOf((Long) document.getData().get("requestedBus")));
                                 schoolNames.add((String) document.getData().get("name"));
+                                idToBus.put(document.getId(), (Long) document.getData().get("requestedBus"));
                                 if(school!=null){
                                     schoolData.add(school);
                                 }
@@ -99,13 +97,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
                             ListView l = findViewById(R.id.list);
                             String[] from={"SchoolName","BusCap"};
                             int[] to={R.id.textView1,R.id.textView2};//int array of views id's
-                            SimpleAdapter simpleAdapter=new SimpleAdapter(AdminDashboardActivity.this,schoolData,R.layout.row_layout,from,to);
-//                            ArrayAdapter<String> arr;
-//                            arr
-//                                    = new ArrayAdapter<String>(
-//                                    AdminDashboardActivity.this,
-//                                    android.R.layout.simple_list_item_1,
-//                                    schoolNames);
+                            SimpleAdapter simpleAdapter=new SimpleAdapter(ApproveBusActivity.this,schoolData,R.layout.row_layout,from,to);
                             l.setAdapter(simpleAdapter);
                             setupListViewListener();
                         } else {
@@ -122,10 +114,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
             for(String sch : checkedSchools){
 
                 DocumentReference doc = db.collection("schools").document(sch);
-                doc.update("verifiedStatus", true);
+                doc.update("busCapacity", idToBus.get(sch));
+                doc.update("requestedBus", FieldValue.delete());
 
             }
-            Toast.makeText(AdminDashboardActivity.this, "Verified Succesfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(ApproveBusActivity.this, "Approved Successfully", Toast.LENGTH_LONG).show();
             finish();
             startActivity(getIntent());
         });
@@ -134,48 +127,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
                     Log.d("List: ", checkedSchools.toString());
                     for(String sch : checkedSchools){
                         DocumentReference doc = db.collection("schools").document(sch);
-                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    Map<String,Object> m = task.getResult().getData();
-                                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
-                                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-                                                        FirebaseUser user = mAuth.getCurrentUser();
-                                                        AuthCredential credential = EmailAuthProvider
-                                                                .getCredential(m.get("email").toString(), m.get("password").toString());
-                                                        Log.d("AdminDashboard : User", String.valueOf(user));
-                                                        if (user != null) {
-                                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
-                                                                if (task1.isSuccessful()) {
-                                                                    Log.d("Tag", "User account deleted.");
-                                                                    doc.delete();
-                                                                    Toast.makeText(AdminDashboardActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
-                                                                    finish();
-                                                                    startActivity(getIntent());
-                                                                }
-                                                                else {
-                                                                    Log.d("Tag", "User deletion failed.");
-                                                                }
-                                                            }));
-                                                        }
-                                                    }
-                                                    else{
-                                                        Log.d("Tag", "Authentication failed.");
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        });
+                        doc.update("requestedBus", FieldValue.delete());
                     }
-                }
-
-        );
+            Toast.makeText(ApproveBusActivity.this, "Rejected Successfully", Toast.LENGTH_LONG).show();
+            finish();
+            startActivity(getIntent());
+        });
 
     }
 
@@ -199,3 +156,4 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 });
     }
 }
+
