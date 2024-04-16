@@ -63,6 +63,11 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private String TAG = "AdminDashboardActivity";
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
@@ -132,47 +137,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         deleteBtn.setOnClickListener(v -> {
                     Log.d("List: ", checkedSchools.toString());
-                    for(String sch : checkedSchools){
-                        DocumentReference doc = db.collection("schools").document(sch);
-                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    Map<String,Object> m = task.getResult().getData();
-                                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
-                                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-                                                        FirebaseUser user = mAuth.getCurrentUser();
-                                                        AuthCredential credential = EmailAuthProvider
-                                                                .getCredential(m.get("email").toString(), m.get("password").toString());
-                                                        Log.d("AdminDashboard : User", String.valueOf(user));
-                                                        if (user != null) {
-                                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
-                                                                if (task1.isSuccessful()) {
-                                                                    Log.d("Tag", "User account deleted.");
-                                                                    doc.delete();
-                                                                    Toast.makeText(AdminDashboardActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
-                                                                    finish();
-                                                                    startActivity(getIntent());
-                                                                }
-                                                                else {
-                                                                    Log.d("Tag", "User deletion failed.");
-                                                                }
-                                                            }));
-                                                        }
-                                                    }
-                                                    else{
-                                                        Log.d("Tag", "Authentication failed.");
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        });
-                    }
+                    deleteUser(0);
+                    Toast.makeText(AdminDashboardActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
                 }
 
         );
@@ -197,5 +163,49 @@ public class AdminDashboardActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+    void deleteUser(int index ){
+        if(index == checkedSchools.size()) {
+            return;
+        }
+        String sch = checkedSchools.get(index);
+        DocumentReference doc = db.collection("schools").document(sch);
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    Map<String,Object> m = task.getResult().getData();
+                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
+                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        AuthCredential credential = EmailAuthProvider
+                                                .getCredential(m.get("email").toString(), m.get("password").toString());
+                                        Log.d("AdminDashboard : User", String.valueOf(user));
+                                        if (user != null) {
+                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
+                                                if (task1.isSuccessful()) {
+                                                    Log.d("Tag", "User account deleted.");
+                                                    doc.delete();
+                                                    deleteUser(index+1);
+                                                }
+                                                else {
+                                                    Log.d("Tag", "User deletion failed.");
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    else{
+                                        Log.d("Tag", "Authentication failed.");
+                                    }
+                                }
+                            });
+                }
+            }
+        });
     }
 }
