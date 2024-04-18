@@ -95,10 +95,10 @@
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
-                            android:id="@+id/edtPhoneNo"
+                            android:id="@+id/edtEmail"
                             style="@style/modifiedEditText"
                             android:hint="Coordinator_Id"
-                            android:inputType="phone"
+                            android:inputType="textPersonName"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,7 +108,7 @@
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
-                            android:id="@+id/edtEmail"
+                            android:id="@+id/edtPhoneNo"
                             style="@style/modifiedEditText"
                             android:hint="Phone_No"
                             android:inputType="textEmailAddress"
@@ -121,7 +121,7 @@
                         android:layout_marginTop="@dimen/loginViewsMargin">
 
                         <EditText
-                            android:id="@+id/edtAddress"
+                            android:id="@+id/password"
                             style="@style/modifiedEditText"
                             android:hint="Password"
                             android:inputType="text"
@@ -139,76 +139,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/container2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical"
-                    android:visibility="invisible">
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-                        <EditText
-                            android:id="@+id/EditTextName"
-                            style="@style/modifiedEditText"
-                            android:inputType="number"
-                            android:maxLines="1"
-                            android:hint="Class / Standard"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-                        <EditText
-                            android:id="@+id/EditTextLastName"
-                            style="@style/modifiedEditText"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:hint="Section"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-                        <EditText
-                            android:id="@+id/EditTextSchoolId"
-                            style="@style/modifiedEditText"
-                            android:inputType="textPersonName"
-                            android:maxLines="1"
-                            android:hint="Roll No."/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-                        <EditText
-                            android:id="@+id/editTextPhoneNo"
-                            style="@style/modifiedEditText"
-                            android:inputType="number"
-                            android:maxLines="1"
-                            android:hint="Age"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-                        <EditText
-                            android:id="@+id/password"
-                            style="@style/modifiedEditText"
-                            android:inputType="number"
-                            android:maxLines="1"
-                            android:hint="weight (in KG)"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/parent"
-                        android:layout_marginTop="@dimen/loginViewsMargin">
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
