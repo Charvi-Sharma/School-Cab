@@ -30,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -68,6 +69,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<LatLng> waypoints = new ArrayList<>();
     private  Marker marker;
     String jsonString;
+
+    // Define MIN_DISTANCE_UPDATE_CAMERA and initialize it with the minimum distance for camera update
+    private static final float MIN_DISTANCE_UPDATE_CAMERA = 10; // Adjust this value as needed
+
+    // Declare previousLocation variable
+    private Location previousLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,16 +274,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             // Add a marker at the current location
-         marker =   mMap.addMarker(new MarkerOptions().position(latLng).title("You are here"));
+//         marker =   mMap.addMarker(new MarkerOptions().position(latLng).title("You are here"));
+            marker = mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title("You are here")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
-         Log.d("location", "onLocationChanged: " + latLng);
+
+            Log.d("location", "onLocationChanged: " + latLng);
 
             // Move the camera to the current location
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(latLng)
-                    .zoom(50)
-                    .build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//            CameraPosition cameraPosition = new CameraPosition.Builder()
+//                    .target(latLng)
+//                    .zoom(50)
+//                    .build();
+//            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            // Check if the current location has changed significantly
+            if (previousLocation == null || location.distanceTo(previousLocation) > MIN_DISTANCE_UPDATE_CAMERA) {
+                // Move the camera to the current location
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(latLng)
+                        .zoom(50)
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                // Update the previous location
+                previousLocation = location;
+            }
+
+            // Add current location as the starting point in the route
+            if (!waypoints.isEmpty()) {
+                waypoints.add(0, latLng);
+                drawRoute(waypoints, waypoints.get(0), waypoints.get(waypoints.size() - 1));
+            }
         }
     }
 
