@@ -26,6 +26,7 @@ public class CoordinatorDashboardActivity extends AppCompatActivity
             startActivity(intent);
         });
 
+
         delete.setOnClickListener(v -> {
             Intent intent = new Intent(CoordinatorDashboardActivity.this, DeleteCoordinator.class);
             startActivity(intent);

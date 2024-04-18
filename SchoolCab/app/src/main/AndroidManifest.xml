@@ -22,7 +22,12 @@
         android:theme="@style/Theme.SchoolCab"
         tools:replace="android:allowBackup"
         tools:targetApi="31">
-
+        <activity
+            android:name=".BusUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BusAddRemoveUploadActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -37,9 +42,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyATEUXqtwozS2BoOaNh1LOvla_SfQXSZFE" />
-
-
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -53,13 +55,12 @@
         -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".ParentsMaps"
             android:exported="false"
             android:label="@string/title_activity_parents_maps" />
-
         <activity
             android:name=".MapsActivity"
             android:exported="false"
@@ -201,9 +202,6 @@
         <activity
             android:name=".AssignStudentsActivity"
             android:screenOrientation="portrait" />
-
-
-
     </application>
 
 </manifest>

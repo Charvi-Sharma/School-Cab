@@ -59,6 +59,7 @@ public class AddBusActivity extends AppCompatActivity {
             String capacity = edtCapacity.getText().toString();
             String userId = edtUserId.getText().toString();
 
+
             Bus bus = new Bus();
             bus.setBusNo(Integer.parseInt(number));
             bus.setBusId(id);
