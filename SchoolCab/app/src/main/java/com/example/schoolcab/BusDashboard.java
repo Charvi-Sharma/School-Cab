@@ -94,7 +94,8 @@ public class BusDashboard extends AppCompatActivity implements LocationListener 
 //        Getting the school id saved in local preferences
         sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String schoolID = sharedpreferences.getString("sId", null);
-//        String busId = sharedpreferences.getString("busId" , null);
+        String busId = sharedpreferences.getString("busId" , null);
+        Log.d("qqqqqqqqqqqqqq", "onCreate: " + busId);
 
 
         RelativeLayout attendance = findViewById(R.id.attendance_button);
@@ -102,8 +103,8 @@ public class BusDashboard extends AppCompatActivity implements LocationListener 
         RelativeLayout logoutButton = findViewById(R.id.logout_button);
         RelativeLayout notification = findViewById(R.id.notification_button);
 
-        getRoute("Ed8b6yjYDIQYgPxUCFFfHwgeEkw2");
-
+//        getRoute("Ed8b6yjYDIQYgPxUCFFfHwgeEkw2");
+          getRoute(busId);
 
         attendance.setOnClickListener(v -> {
             Intent intent = new Intent(BusDashboard.this, AttendanceTypeActivity.class);

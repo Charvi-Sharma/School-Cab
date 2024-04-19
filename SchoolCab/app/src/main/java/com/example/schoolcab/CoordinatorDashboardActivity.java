@@ -3,6 +3,7 @@ package com.example.schoolcab;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +13,9 @@ public class CoordinatorDashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_co_ordinator_dashboard);
 
-        Button register = findViewById(R.id.register);
-        Button update = findViewById(R.id.update);
-        Button delete = findViewById(R.id.delete);
+        RelativeLayout register = findViewById(R.id.register);
+        RelativeLayout update = findViewById(R.id.update);
+        RelativeLayout delete = findViewById(R.id.delete);
 
         register.setOnClickListener(v -> {
             Intent intent = new Intent(CoordinatorDashboardActivity.this, CoOrdinatorRegistration.class);

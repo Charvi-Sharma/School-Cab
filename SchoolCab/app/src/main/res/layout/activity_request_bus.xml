@@ -29,13 +29,13 @@
                     android:layout_alignParentLeft="true"
                     style="@style/viewParent.headerText.NoMode"
                     android:textColor="@color/lavender"
-                    android:text="Delete Coordinator "/>
+                    android:text="     Request Bus"/>
 
 
                 <ImageView
                     android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:src="@drawable/delete"
+                    android:src="@drawable/bus"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"/>
             </RelativeLayout>
@@ -45,35 +45,22 @@
                 style="@style/parent"
                 android:layout_marginTop="@dimen/loginViewsMargin">
                 <EditText
-                    android:id="@+id/id"
+                    android:id="@+id/edtTitle"
                     style="@style/modifiedEditText"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:maxLines="1"
-                    android:hint="School_Id"/>
+                    android:hint="Number of Buses"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
-
-
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/delete_coordinator"
+                android:id="@+id/edtSend"
                 style="@style/loginButton"
 
-                android:text="Delete"
+                android:text="Request"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/loginViewsMargin"
 
                 tools:ignore="MissingClass" />
-
-
-
-
-
-
-
-
         </LinearLayout>
     </ScrollView>
 
