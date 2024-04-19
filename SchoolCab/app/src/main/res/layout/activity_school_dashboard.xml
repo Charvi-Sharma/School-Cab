@@ -73,10 +73,10 @@
                     android:layout_height="match_parent">
                     <TextView
                         android:id="@+id/clothingName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/clothingImage"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:text="Bus/Tracking"
                         android:textColor="@color/lavender"
@@ -84,8 +84,8 @@
 
                     <ImageView
                         android:id="@+id/clothingImage"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:src="@drawable/bus" />
@@ -108,10 +108,10 @@
 
                     <TextView
                         android:id="@+id/elecName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/elecImage"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:text="Bus Coordinator"
                         android:textColor="@color/lavender"
@@ -119,8 +119,8 @@
 
                     <ImageView
                         android:id="@+id/elecImage"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:src="@drawable/bus_coordinator" />
@@ -151,18 +151,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/homeName"
                         android:text="Manage Students"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/homeImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/homeImage"
                         android:src="@drawable/student_svgrepo_com"
                         android:layout_marginTop="15dp"
@@ -181,18 +181,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/beautyName"
                         android:text="Attendance"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/beautyImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/beautyImage"
                         android:src="@drawable/attendance"
                         android:layout_marginTop="15dp"
@@ -225,18 +225,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/pharmName"
                         android:text="Notification"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/pharmImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/pharmImage"
                         android:src="@drawable/notification"
                         android:layout_marginTop="15dp"
@@ -255,18 +255,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/grocName1"
                         android:text="Request Capacity"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/grocImage1"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/grocImage1"
                         android:src="@drawable/bus"
                         android:layout_marginTop="15dp"
@@ -298,18 +298,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/grocName"
                         android:text="Logout"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/grocImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/grocImage"
                         android:src="@drawable/logout"
                         android:layout_marginTop="15dp"

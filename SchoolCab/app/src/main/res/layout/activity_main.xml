@@ -24,17 +24,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/amazonImage"/>
+
         <TextView
+            android:id="@+id/amazonDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/amazonDesc"
-            android:text="Your Kids Bus Tracker"
-            android:textSize="14sp"
             android:layout_marginStart="18dp"
+            android:layout_marginTop="12dp"
+            android:text="Your Kids Bus Tracker"
             android:textColor="@color/lavender"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/amazonImage"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amazonName"
-            app:layout_constraintEnd_toStartOf="@+id/amazonImage"/>
+            app:layout_constraintTop_toBottomOf="@id/amazonName" />
+
         <ImageView
             android:layout_width="0dp"
             android:layout_height="160dp"
@@ -73,19 +77,20 @@
 
                     <TextView
                         android:id="@+id/clothingName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/clothingImage"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
                         android:text="School"
+                        android:textAlignment="center"
                         android:textColor="@color/lavender"
                         android:textSize="20sp" />
 
                     <ImageView
                         android:id="@+id/clothingImage"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:src="@drawable/school" />
@@ -107,10 +112,10 @@
 
                     <TextView
                         android:id="@+id/elecName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/elecImage"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:text="Parent/Student"
                         android:textColor="@color/lavender"
@@ -118,8 +123,8 @@
 
                     <ImageView
                         android:id="@+id/elecImage"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
                         android:src="@drawable/parents" />
@@ -150,18 +155,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/homeName"
                         android:text="Bus"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/homeImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/homeImage"
                         android:src="@drawable/bus"
                         android:layout_marginTop="15dp"
@@ -180,18 +185,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/beautyName"
                         android:text="Coordinator"
                         android:textSize="20sp"
                         android:textColor="@color/lavender"
                         android:layout_marginTop="10dp"
-                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:layout_below="@+id/beautyImage"/>
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         android:id="@+id/beautyImage"
                         android:src="@drawable/bus_coordinator"
                         android:layout_marginTop="15dp"
