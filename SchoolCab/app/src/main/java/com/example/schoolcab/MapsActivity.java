@@ -71,10 +71,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String jsonString;
 
     // Define MIN_DISTANCE_UPDATE_CAMERA and initialize it with the minimum distance for camera update
-    private static final float MIN_DISTANCE_UPDATE_CAMERA = 10; // Adjust this value as needed
+    private boolean isNavigationStarted = false;
+    private static final float MIN_DISTANCE_UPDATE_CAMERA = 10;
+    private static final float NAVIGATION_TOLERANCE = 20; // Adjust as needed
 
     // Declare previousLocation variable
     private Location previousLocation;
+    private Marker navigationMarker;
+    private LatLng userLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-          jsonString = getIntent().getStringExtra("data");
+        jsonString = getIntent().getStringExtra("data");
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -120,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Log.d("hello Mister", "onMapReady: " + jsonString);
 
-       Gson gson = new Gson();
+        Gson gson = new Gson();
         Type type = new TypeToken<Map<String, Object>>() {}.getType();
         Map<String, Object> jsonMap = gson.fromJson(jsonString, type);
         Map<String, Object> routeMap = (Map<String, Object>) jsonMap.get("Route");
@@ -255,60 +259,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
+    private void initializeNavigationMarker(LatLng location) {
+        // Create a flat arrow marker with green color
+        navigationMarker = mMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title("Your Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                .anchor(0.5f, 0.5f)
+                .rotation(90.0f));
+    }
 
 
     @SuppressLint("RestrictedApi")
     @Override
     public void onLocationChanged(Location location) {
+        if (!isNavigationStarted) {
+            // Initialize navigation marker at the user's initial location
+            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(userLocation)
+                    .title("Your Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            waypoints.add(0, userLocation);
+            drawRoute(waypoints, userLocation, waypoints.get(waypoints.size() - 1));
 
-        Log.d("here i am ", "here");
-        if (mMap != null) {
-            if (marker != null) {
-                marker.remove();
-            }
-
-
-
-            // Get the current location
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            // Add a marker at the current location
-//         marker =   mMap.addMarker(new MarkerOptions().position(latLng).title("You are here"));
-            marker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title("You are here")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-
-
-            Log.d("location", "onLocationChanged: " + latLng);
-
-            // Move the camera to the current location
-//            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                    .target(latLng)
-//                    .zoom(50)
-//                    .build();
-//            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            // Check if the current location has changed significantly
-            if (previousLocation == null || location.distanceTo(previousLocation) > MIN_DISTANCE_UPDATE_CAMERA) {
-                // Move the camera to the current location
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(latLng)
-                        .zoom(50)
-                        .build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-                // Update the previous location
-                previousLocation = location;
-            }
-
-            // Add current location as the starting point in the route
-            if (!waypoints.isEmpty()) {
-                waypoints.add(0, latLng);
-                drawRoute(waypoints, waypoints.get(0), waypoints.get(waypoints.size() - 1));
+            // Initialize navigation marker
+            initializeNavigationMarker(userLocation);
+            isNavigationStarted = true;
+        } else {
+            // Update navigation marker's position
+            LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            if (navigationMarker != null) {
+                float distance = calculateDistance(navigationMarker.getPosition(), updatedLocation);
+                if (distance > NAVIGATION_TOLERANCE) {
+                    // Move the navigation marker only if the distance is significant
+                    navigationMarker.setPosition(updatedLocation);
+                }
             }
         }
+    }
+
+    private float calculateDistance(LatLng point1, LatLng point2) {
+        Location loc1 = new Location("");
+        loc1.setLatitude(point1.latitude);
+        loc1.setLongitude(point1.longitude);
+        Location loc2 = new Location("");
+        loc2.setLatitude(point2.latitude);
+        loc2.setLongitude(point2.longitude);
+        return loc1.distanceTo(loc2);
     }
 
     // Implement other LocationListener methods as needed
@@ -335,6 +333,3 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 }
-
-
-
