@@ -1,8 +1,12 @@
 package com.example.schoolcab;
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +40,8 @@ public class UpdateCoordinator extends AppCompatActivity
         name=findViewById(R.id.name);
         lastname=findViewById(R.id.lastName);
         phoneNo=findViewById(R.id.phoneNo);
-        schoolid=findViewById(R.id.schoolid);
+//        schoolid=findViewById(R.id.schoolid);
+
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +50,9 @@ public class UpdateCoordinator extends AppCompatActivity
                 String newName=name.getText().toString();
                 String newLastName=lastname.getText().toString();
                 String newPhoneNo=phoneNo.getText().toString();
-                String school_id=schoolid.getText().toString();
+//                String school_id=schoolid.getText().toString();
+                SharedPreferences sharedpreferences=getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+                String school_id=sharedpreferences.getString("sId",NULL);
 
                 name.setText("");
                 lastname.setText("");
