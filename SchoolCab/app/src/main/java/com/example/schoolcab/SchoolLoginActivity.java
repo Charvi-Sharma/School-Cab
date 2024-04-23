@@ -64,6 +64,7 @@ public class SchoolLoginActivity extends AppCompatActivity {
         TextView register = findViewById(R.id.register);
         register.setOnClickListener(v -> {
             Intent intent = new Intent(SchoolLoginActivity.this, SchoolRegistrationActivity.class);
+            finish();
             startActivity(intent);
 
         });

@@ -48,6 +48,7 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
             EditText confirmPasswordEditText = findViewById(R.id.confirm_password);
             EditText schoolEmail = findViewById(R.id.school_email);
             EditText contactNo = findViewById(R.id.contactNo);
+            EditText busCapacityEditText = findViewById(R.id.busCapacity);
 
             String name = nameEditText.getText().toString();
             String board = boardEditText.getText().toString();
@@ -56,6 +57,7 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
             String confirmPassword = confirmPasswordEditText.getText().toString();
             String mobileNo = contactNo.getText().toString();
+            Integer busCapacity = Integer.valueOf(busCapacityEditText.getText().toString());
 
 
             Log.d("SchoolRegistration", "Name: " + name + ", Password: " + password +
@@ -73,6 +75,7 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
                 school.setPassword(password);
                 school.setEmail(email);
                 school.setMobileNo(mobileNo);
+                school.setBusCapacity(busCapacity);
 
 
                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -101,9 +104,11 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
+                                                        mAuth.signOut();
                                                         // school information saved to Firestore successfully
                                                         Toast.makeText(SchoolRegistrationActivity.this, "School Registered Succesfully \n You will Soon Contacted and Verified by our panel", Toast.LENGTH_LONG).show();
                                                         Intent intent = new Intent(SchoolRegistrationActivity.this , SchoolLoginActivity.class);
+                                                        finish();
                                                         startActivity(intent);
 
                                                     } else {
@@ -121,7 +126,7 @@ public class SchoolRegistrationActivity extends AppCompatActivity {
                         });
 
             } else {
-                Toast.makeText(SchoolRegistrationActivity.this, "Passwords not Match", Toast.LENGTH_LONG).show();
+                Toast.makeText(SchoolRegistrationActivity.this, "Passwords do not match", Toast.LENGTH_LONG).show();
             }
 
         });

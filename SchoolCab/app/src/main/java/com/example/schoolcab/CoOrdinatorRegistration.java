@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,18 +51,23 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
         Button registerButton = findViewById(R.id.co_register);
         registerButton.setOnClickListener(v -> {
             // Collect coordinator details from EditText fields
-            EditText nameEditText = findViewById(R.id.EditTextName);
-            EditText lastNameEditText = findViewById(R.id.EditTextLastName);
-            EditText coordinator=findViewById(R.id.EditTextSchoolId);
-            EditText phoneNoEditText=findViewById(R.id.editTextPhoneNo);
-            EditText passwordEditText=findViewById(R.id.password);
+            EditText nameEditText = findViewById(R.id.edtName);
+            EditText lastNameEditText = findViewById(R.id.edtGuardian);
+            EditText coordinator = findViewById(R.id.edtEmail);
+            EditText phoneNoEditText = findViewById(R.id.edtPhoneNo);
+            EditText passwordEditText = findViewById(R.id.password);
 
             String name = nameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
-            String phoneNo=phoneNoEditText.getText().toString();
-            String coordinator_id=coordinator.getText().toString();
-            String password=passwordEditText.getText().toString();
+            String phoneNo = phoneNoEditText.getText().toString();
+            String coordinator_id = coordinator.getText().toString();
+            String password = passwordEditText.getText().toString();
 
+            // Validate coordinator_id and password
+            if (TextUtils.isEmpty(coordinator_id) || TextUtils.isEmpty(password)) {
+                Toast.makeText(CoOrdinatorRegistration.this, "Coordinator ID and password cannot be empty", Toast.LENGTH_SHORT).show();
+                return; // Stop further execution
+            }
 
             CoOrdinator c = new CoOrdinator();
             c.setName(name);
@@ -71,10 +77,7 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
             c.setCoordinatorId(coordinator_id);
             c.setPassword(password);
 
-
-
-
-            //            Creating authentication for user in firebase
+            // Creating authentication for user in firebase
             mAuth.createUserWithEmailAndPassword(coordinator_id, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -93,7 +96,7 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
                                 // Save additional user information to Firestore
                                 DocumentReference userRef = db.collection("coordinators").document(userId);
 
-//                                Saving Additional information of user in fireStore with same id
+                                // Saving Additional information of user in Firestore with same id
                                 userRef.set(c)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
@@ -120,20 +123,7 @@ public class CoOrdinatorRegistration extends AppCompatActivity {
                             }
                         }
                     });
-
-
-
-            // Add student to Firestore
-//            CollectionReference coordinatorCollection = db.collection("coordinators");
-//
-//            coordinatorCollection.add(c)
-//                    .addOnSuccessListener(documentReference -> {
-//                        Toast.makeText(this, "Coordinator registered successfully!", Toast.LENGTH_SHORT).show();
-//                    })
-//                    .addOnFailureListener(e -> {
-//                        Log.e("coordinatorRegistration", "Error registering co-ordinator", e);
-//                        Toast.makeText(this, "Error registering co-ordinator", Toast.LENGTH_SHORT).show();
-//                    });
         });
+
     }
 }

@@ -54,6 +54,7 @@ public class SchoolDashboardActivity extends AppCompatActivity {
         RelativeLayout attendanceButton = findViewById(R.id.attendance_button);
         RelativeLayout logoutButton = findViewById(R.id.logoutButton);
         RelativeLayout sendNotification = findViewById(R.id.sendNotification);
+        RelativeLayout requestCapacity = findViewById(R.id.requestBus);
 
 
         busButton.setOnClickListener(v -> {
@@ -82,6 +83,11 @@ public class SchoolDashboardActivity extends AppCompatActivity {
            Intent intent = new Intent(SchoolDashboardActivity.this, ReportActivity.class);
            startActivity(intent);
         });
+
+       requestCapacity.setOnClickListener(v -> {
+           Intent intent = new Intent(SchoolDashboardActivity.this, RequestBusActivity.class);
+           startActivity(intent);
+       });
 
         logoutButton.setOnClickListener(v -> {
             mAuth.signOut();

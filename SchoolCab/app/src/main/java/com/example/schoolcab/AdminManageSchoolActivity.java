@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +48,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class AdminDashboardActivity extends AppCompatActivity {
+public class AdminManageSchoolActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -60,17 +59,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
     private List<String> checkedSchools = new ArrayList<>();
 
-    private String TAG = "AdminDashboardActivity";
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+    private String TAG = "AdminManageSchoolActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_dashboard);
+        setContentView(R.layout.activity_admin_manage_school);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -90,7 +84,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
                                 Map<String,String> school = new HashMap<>();
                                 school.put("SchoolId", document.getId());
                                 school.put("SchoolName", (String) document.getData().get("name"));
-                                school.put("BusCap",String.valueOf((Long) document.getData().get("busCapacity")));
                                 schoolNames.add((String) document.getData().get("name"));
                                 if(school!=null){
                                     schoolData.add(school);
@@ -102,16 +95,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
                             }
                             ListView l = findViewById(R.id.list);
-                            String[] from={"SchoolName","BusCap"};
-                            int[] to={R.id.textView1,R.id.textView2};//int array of views id's
-                            SimpleAdapter simpleAdapter=new SimpleAdapter(AdminDashboardActivity.this,schoolData,R.layout.row_layout,from,to);
-//                            ArrayAdapter<String> arr;
-//                            arr
-//                                    = new ArrayAdapter<String>(
-//                                    AdminDashboardActivity.this,
-//                                    android.R.layout.simple_list_item_1,
-//                                    schoolNames);
-                            l.setAdapter(simpleAdapter);
+                            ArrayAdapter<String> arr;
+                            arr
+                                    = new ArrayAdapter<String>(
+                                    AdminManageSchoolActivity.this,
+                                    android.R.layout.simple_list_item_1,
+                                    schoolNames);
+                            l.setAdapter(arr);
                             setupListViewListener();
                         } else {
                             Log.d(TAG, "Error while fetching school data: ", task.getException());
@@ -130,15 +120,54 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 doc.update("verifiedStatus", true);
 
             }
-            Toast.makeText(AdminDashboardActivity.this, "Verified Succesfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(AdminManageSchoolActivity.this, "Verified Succesfully", Toast.LENGTH_LONG).show();
             finish();
             startActivity(getIntent());
         });
 
         deleteBtn.setOnClickListener(v -> {
                     Log.d("List: ", checkedSchools.toString());
-                    deleteUser(0);
-                    Toast.makeText(AdminDashboardActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
+                    for(String sch : checkedSchools){
+                        DocumentReference doc = db.collection("schools").document(sch);
+                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    Map<String,Object> m = task.getResult().getData();
+                                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
+                                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        FirebaseUser user = mAuth.getCurrentUser();
+                                                        AuthCredential credential = EmailAuthProvider
+                                                                .getCredential(m.get("email").toString(), m.get("password").toString());
+                                                        Log.d("AdminDashboard : User", String.valueOf(user));
+                                                        if (user != null) {
+                                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
+                                                                if (task1.isSuccessful()) {
+                                                                    Log.d("Tag", "User account deleted.");
+                                                                    doc.delete();
+                                                                    Toast.makeText(AdminManageSchoolActivity.this, "Deleted Succesfully", Toast.LENGTH_LONG).show();
+                                                                    finish();
+                                                                    startActivity(getIntent());
+                                                                }
+                                                                else {
+                                                                    Log.d("Tag", "User deletion failed.");
+                                                                }
+                                                            }));
+                                                        }
+                                                    }
+                                                    else{
+                                                        Log.d("Tag", "Authentication failed.");
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+                    }
                 }
 
         );
@@ -164,48 +193,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
                 });
     }
-
-    void deleteUser(int index ){
-        if(index == checkedSchools.size()) {
-            return;
-        }
-        String sch = checkedSchools.get(index);
-        DocumentReference doc = db.collection("schools").document(sch);
-        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    Map<String,Object> m = task.getResult().getData();
-                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
-                            addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        AuthCredential credential = EmailAuthProvider
-                                                .getCredential(m.get("email").toString(), m.get("password").toString());
-                                        Log.d("AdminDashboard : User", String.valueOf(user));
-                                        if (user != null) {
-                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
-                                                if (task1.isSuccessful()) {
-                                                    Log.d("Tag", "User account deleted.");
-                                                    doc.delete();
-                                                    deleteUser(index+1);
-                                                }
-                                                else {
-                                                    Log.d("Tag", "User deletion failed.");
-                                                }
-                                            }));
-                                        }
-                                    }
-                                    else{
-                                        Log.d("Tag", "Authentication failed.");
-                                    }
-                                }
-                            });
-                }
-            }
-        });
-    }
 }
+
+        
