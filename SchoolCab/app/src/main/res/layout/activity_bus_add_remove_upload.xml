@@ -9,66 +9,52 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
-        android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0" >
-
-    <Button
-        android:id="@+id/upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
-        android:text="Upload"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-
-
-
-
-
+        android:id="@+id/constraintLayout"
+        android:layout_marginTop="20dp">
         <TextView
-            android:id="@+id/amazonName"
             android:layout_width="0dp"
             android:layout_height="42dp"
-            android:layout_marginStart="136dp"
-            android:layout_marginTop="32dp"
+            android:id="@+id/amazonName"
             android:text="Manage "
-            android:textColor="@color/colorAccent"
             android:textSize="35sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintEnd_toStartOf="@+id/amazonImage"/>
         <TextView
-            android:id="@+id/amazonDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
-            android:text="Coordinator"
-            android:textColor="@color/lavender"
+            android:id="@+id/amazonDesc"
+            android:text="Buses"
             android:textSize="35sp"
+            android:layout_marginStart="18dp"
+            android:textColor="@color/lavender"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/amazonName" />
+            app:layout_constraintTop_toBottomOf="@id/amazonName"
+            app:layout_constraintEnd_toStartOf="@+id/amazonImage"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:id="@+id/amazonImage"
+            android:src="@drawable/bus"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@id/amazonName"/>
 
         <LinearLayout
             android:id="@+id/row1"
             android:layout_width="0dp"
             android:layout_height="175dp"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amazonDesc">
+            app:layout_constraintTop_toBottomOf="@id/amazonImage">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/clothingCard"
@@ -80,7 +66,7 @@
                 app:cardElevation="20dp">
 
                 <RelativeLayout
-                    android:id="@+id/register"
+                    android:id="@+id/addBus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -88,15 +74,15 @@
                         android:id="@+id/clothingName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/registerCoordinator"
+                        android:layout_below="@+id/clothingImage"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
-                        android:text="Register "
+                        android:text="Add "
                         android:textColor="@color/lavender"
                         android:textSize="20sp" />
 
                     <ImageView
-                        android:id="@+id/registerCoordinator"
+                        android:id="@+id/clothingImage"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_centerHorizontal="true"
@@ -114,7 +100,7 @@
                 app:cardElevation="20dp">
 
                 <RelativeLayout
-                    android:id="@+id/update"
+                    android:id="@+id/updateBus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -122,7 +108,7 @@
                         android:id="@+id/elecName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/updateCoordinator"
+                        android:layout_below="@+id/elecImage"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:text="Update "
@@ -130,7 +116,7 @@
                         android:textSize="20sp" />
 
                     <ImageView
-                        android:id="@+id/updateCoordinator"
+                        android:id="@+id/elecImage"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_centerHorizontal="true"
@@ -141,48 +127,74 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="175dp"
             android:id="@+id/row2"
-            android:layout_width="207dp"
-            android:layout_height="162dp"
-            android:layout_marginTop="44dp"
             android:orientation="horizontal"
+            android:layout_marginTop="10dp"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/row1">
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="20dp">
-
+                app:cardElevation="20dp"
+                app:cardCornerRadius="20dp">
                 <RelativeLayout
-                    android:id="@+id/delete"
+                    android:id="@+id/uploadBus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <TextView
-                        android:id="@+id/beautyName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/deleteCoordinator"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
-                        android:text="Delete"
+                        android:id="@+id/homeName"
+                        android:text="Upload "
+                        android:textSize="20sp"
                         android:textColor="@color/lavender"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:id="@+id/deleteCoordinator"
-                        android:layout_width="75dp"
-                        android:layout_height="62dp"
+                        android:layout_marginTop="10dp"
                         android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/homeImage"/>
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:id="@+id/homeImage"
+                        android:src="@drawable/upload"
                         android:layout_marginTop="15dp"
-                        android:src="@drawable/delete" />
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="20dp">
+                <RelativeLayout
+                    android:id="@+id/deleteBus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/beautyName"
+                        android:text="Delete"
+                        android:textSize="20sp"
+                        android:textColor="@color/lavender"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/beautyImage"/>
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:id="@+id/beautyImage"
+                        android:src="@drawable/delete"
+                        android:layout_marginTop="15dp"
+                        android:layout_centerHorizontal="true"/>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

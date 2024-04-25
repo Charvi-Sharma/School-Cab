@@ -75,7 +75,7 @@ public class CoordinatorDashboard extends AppCompatActivity {
 
 //            Toast.makeText(CoordinatorDashboard.this, "This Functionality is not yet Implemented", Toast.LENGTH_LONG).show();
 
-            Intent intent = new Intent(CoordinatorDashboard.this, AddBusActivity.class);
+            Intent intent = new Intent(CoordinatorDashboard.this, BusAddRemoveUploadActivity.class);
             startActivity(intent);
         });
 
