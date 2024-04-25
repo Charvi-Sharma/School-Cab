@@ -196,9 +196,9 @@ public class BusDashboard extends AppCompatActivity implements LocationListener 
         sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String busId = sharedpreferences.getString("busId", null);
 
-
-        busCollection.document(busId).update(updateData);
-
+        if(busId!=null){
+            busCollection.document(busId).update(updateData);
+        }
 
         }
 

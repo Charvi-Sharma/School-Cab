@@ -22,6 +22,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,9 +38,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Map;
+
 public class SearchStudent extends AppCompatActivity {
     private FirebaseFirestore db;
 
+    private FirebaseAuth mAuth;
     public static final String SHARED_PREFS = "shared_prefs";
 
     // key for schoolId
@@ -48,6 +57,7 @@ public class SearchStudent extends AppCompatActivity {
         //        Getting the school id saved in local preferences
         sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String schoolID = sharedpreferences.getString("sId", null);
+
 
 
         db = FirebaseFirestore.getInstance();
@@ -111,39 +121,58 @@ public class SearchStudent extends AppCompatActivity {
     private void deleteStudent(String id)
     {
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        //        Getting the school id saved in local preferences
+        String email = sharedpreferences.getString("email", null);
+        String password = sharedpreferences.getString("password", null);
 
         new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Closing Activity").setMessage("Are you sure you Want to delete this student ? Once Deleted Cannot be Recovered")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        db.collection("students").document(id)
-                                .delete()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(SearchStudent.this, "Student successfully deleted!", Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(SearchStudent.this, StudentAddUpdatePage.class);
-                                        startActivity(intent);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(SearchStudent.this, "Error Deleting Student", Toast.LENGTH_LONG).show();
+                        DocumentReference doc = db.collection("students").document(id);
+                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
-//                                        Log.w(TAG, "Error deleting Student", e);
-                                    }
-                                });
-
-
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Map<String, Object> m = task.getResult().getData();
+                                    mAuth.signInWithEmailAndPassword(m.get("email").toString(), m.get("password").toString()).
+                                            addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        FirebaseUser user = mAuth.getCurrentUser();
+                                                        AuthCredential credential = EmailAuthProvider
+                                                                .getCredential(m.get("email").toString(), m.get("password").toString());
+                                                        Log.d("AdminDashboard : User", String.valueOf(user));
+                                                        if (user != null) {
+                                                            user.reauthenticate(credential).addOnCompleteListener(task2 -> user.delete().addOnCompleteListener(task1 -> {
+                                                                if (task1.isSuccessful()) {
+                                                                    Log.d("Tag", "User account deleted.");
+                                                                    doc.delete();
+                                                                    mAuth.signInWithEmailAndPassword(email, password);
+                                                                    finish();
+                                                                } else {
+                                                                    Log.d("Tag", "User deletion failed.");
+                                                                }
+                                                            }));
+                                                        }
+                                                    } else {
+                                                        Log.d("Tag", "Authentication failed.");
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SearchStudent.this, StudentAddUpdatePage.class);
-                        startActivity(intent);
+                        finish();
                     }
                 }).show();
     }
