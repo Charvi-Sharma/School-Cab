@@ -9,7 +9,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
         android:layout_marginTop="136dp"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +16,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0" >
 
     <Button
         android:id="@+id/upload"
@@ -29,15 +28,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:layout_constraintVertical_bias="0.0" />
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-=======
-        android:id="@+id/constraintLayout"
-        android:layout_marginTop="20dp">
+
+
 
         <TextView
             android:id="@+id/amazonName"
@@ -193,4 +189,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
->>>>>>> 423616ff9ef3793cfdb9e948e5a61eb169d1a7da

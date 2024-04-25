@@ -68,7 +68,7 @@ public class AdminManageSchoolActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        db = FirebaseFirestore.getInstance();git
+        db = FirebaseFirestore.getInstance();
 
         db.collection("schools")
                 .whereEqualTo("verifiedStatus", false)
