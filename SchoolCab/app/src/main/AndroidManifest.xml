@@ -202,6 +202,19 @@
         <activity
             android:name=".AssignStudentsActivity"
             android:screenOrientation="portrait" />
+<<<<<<< HEAD
+=======
+        <activity
+            android:name=".AdminHomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ApproveBusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RequestBusActivity"
+            android:screenOrientation="portrait" />
+
+>>>>>>> 423616ff9ef3793cfdb9e948e5a61eb169d1a7da
     </application>
 
 </manifest>
