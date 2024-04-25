@@ -6,57 +6,44 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-
-import jxl.read.biff.BiffException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-//import org.apache.poi.ss.usermodel.*;
-//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.io.File;
-import java.io.FileInputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UploadStudents extends AppCompatActivity {
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
+public class BusUploadActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
-    public static final String SHARED_PREFS = "shared_prefs";
+
+    SharedPreferences sharedPreferences;
+    String schoolId;
+
 
 
     private ActivityResultLauncher<Intent> filePickerLauncher;
@@ -64,7 +51,7 @@ public class UploadStudents extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_students);
+        setContentView(R.layout.activity_bus_upload);
 
         //        Getting the school id saved in local preferences
         db = FirebaseFirestore.getInstance();
@@ -78,13 +65,13 @@ public class UploadStudents extends AppCompatActivity {
 
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                     if (result.getResultCode() == RESULT_OK) {
+                    if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
                             Uri fileUri = data.getData();
                             // Read the selected Excel file
 
-                             readExcelFile(fileUri);
+                            readExcelFile(fileUri);
                             // Process and store the data as needed
 
                         }
@@ -98,14 +85,17 @@ public class UploadStudents extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/vnd.ms-excel"); // for .xls files
                 filePickerLauncher.launch(intent);
-             }
+            }
         });
     }
 
     // Define the readExcelFile method here or in a separate class
     private void readExcelFile(Uri fileUri) {
-        String ID = mAuth.getCurrentUser().getUid().toString();
-        List<NewStudent> students = new ArrayList<>();
+         List<Bus> buses = new ArrayList<>();
+        sharedPreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+        schoolId = sharedPreferences.getString("sId", null);
+
+
         try {
             // Open the Excel file using JExcelApi
             InputStream inputStream = getContentResolver().openInputStream(fileUri);
@@ -116,41 +106,26 @@ public class UploadStudents extends AppCompatActivity {
 
                 Cell[] cells = sheet.getRow(row);
 //               parsing the rows one by one
-                String name = cells[0].getContents();
-                String rollNo = cells[1].getContents();
-                String guardian = cells[2].getContents();
-                String phoneNo = cells[3].getContents();
-                String email = cells[4].getContents();
-                String address = cells[5].getContents();
-                int standard = Integer.parseInt(cells[6].getContents());
-                String section = cells[7].getContents();
-                int age = Integer.parseInt(cells[8].getContents());
-                int weight = Integer.parseInt(cells[9].getContents());
-                String defaultAddress = cells[10].getContents();
-                String sex = cells[11].getContents();
+                String number = cells[0].getContents();
+                String id = cells[1].getContents();
+                String capacity = cells[2].getContents();
+                String userId = cells[3].getContents();
 
-                NewStudent student = new NewStudent(); // Create a Student object
-                student.setName(name);
-                student.setRollNo(rollNo);
-                student.setGuardian(guardian);
-                student.setPhoneNo(phoneNo);
-                student.setAddress(address);
-                student.setDefaultAddress(defaultAddress);
-                student.setStandard(standard);
-                student.setSection(section);
-                student.setSex(sex);
-                student.setAge(age);
-                student.setWeight(weight);
-                student.setEmail(email);
-                student.setSchoolId(ID);
-//                student.setStopName(selectedStopName);
 
-                students.add(student);
+                Bus bus = new Bus();
+                bus.setBusNo(Integer.parseInt(number));
+                bus.setBusId(id);
+                bus.setBusCapacity(Integer.parseInt(capacity));
+                bus.setBusUserId(userId);
+                bus.setPassword("1234567890");
+                bus.setSchoolId(schoolId);
+
+                buses.add(bus);
 
             }
 
-            HashMap<NewStudent , String> mapper = new HashMap<>();
-            createUser(0 ,students , mapper);
+            HashMap<Bus, String> mapper = new HashMap<>();
+            createUser(0 ,buses , mapper);
             workbook.close();
         } catch (IOException | BiffException e) {
             e.printStackTrace();
@@ -159,13 +134,13 @@ public class UploadStudents extends AppCompatActivity {
 
 
 
-    void createUser(int index ,List<NewStudent> students , HashMap<NewStudent , String> mapper ){
-        if(index == students.size()) {
-            addStudentsToDb(mapper);
+    void createUser(int index ,List<Bus> buses , HashMap<Bus , String> mapper ){
+        if(index == buses.size()) {
+            addBusesToDb(mapper);
             return;
         }
-         NewStudent student = students.get(index);
-        mAuth.createUserWithEmailAndPassword(student.getEmail(), "1234567890")
+        Bus bus = buses.get(index);
+        mAuth.createUserWithEmailAndPassword(bus.getBusUserId(), "1234567890")
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -174,56 +149,90 @@ public class UploadStudents extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             String userId = user.getUid();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName("student")
+                                    .setDisplayName("bus")
                                     .build();
                             user.updateProfile(profileUpdates);
 
-                              mapper.put(student , userId);
-                            createUser(index+1 , students , mapper);
+                            mapper.put(bus , userId);
+                            createUser(index+1 , buses , mapper);
                             return;
                         } else {
                             // Handle signup failure
-                            Toast.makeText(UploadStudents.this, "Signup failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BusUploadActivity.this, "Signup failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    void addStudentsToDb(HashMap<NewStudent , String> mapper ){
+    void addBusesToDb(HashMap<Bus , String> mapper ){
 
 
-        for (Map.Entry<NewStudent, String> entry : mapper.entrySet()) {
-            NewStudent studentx = entry.getKey();
+        for (Map.Entry<Bus, String> entry : mapper.entrySet()) {
+            Bus busx = entry.getKey();
             String uId = entry.getValue();
 
 
-            DocumentReference userRef = db.collection("students").document(uId);
+            DocumentReference userRef = db.collection("bus").document(uId);
 
-        //Saving Additional information of user in fireStore with same id
-                                    userRef.set(studentx)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-        @Override
-        public void onComplete(@NonNull Task<Void> task) {
-            if (task.isSuccessful()) {
-                Log.d("Hello here" , "task Accomplished");
-            } else {
-                     Toast.makeText(UploadStudents.this, "Error saving user data to Firestore.", Toast.LENGTH_SHORT).show();
-             }
-        }
-    });
+            //Saving Additional information of user in fireStore with same id
+            userRef.set(busx)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("Hello here" , "task Accomplished");
+                            } else {
+                                Toast.makeText(BusUploadActivity.this, "Error saving user data to Firestore.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
         }
 
-        SharedPreferences sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences sharedpreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
         String id = sharedpreferences.getString("email", null);
         String password = sharedpreferences.getString("password", null);
 
 
         mAuth.signInWithEmailAndPassword(id, password);
-        Intent intent = new Intent(UploadStudents.this, StudentAddUpdatePage.class);
+        Intent intent = new Intent(BusUploadActivity.this, BusAddRemoveUploadActivity.class);
         startActivity(intent);
 //        finish();
         return;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
